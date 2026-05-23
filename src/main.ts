@@ -1,4 +1,5 @@
 import { createComputor } from "./computor/computor";
+import { createGateWindow } from "./gates/gateWindow";
 
 const computor = createComputor();
 
@@ -25,3 +26,7 @@ computor.units[3].setAd2Bits("00");
 computor.units[3].setValBits("000000");
 
 computor.setPointer(0);
+
+const gateWindow = createGateWindow();
+
+document.body.append(gateWindow);

@@ -1,4 +1,4 @@
-import { createToggleButton } from "./toggleButton";
+import { createToggleButton } from "../sharedPrimitives/toggleButton";
 
 const createBitDiv = ({
   address,
@@ -114,6 +114,7 @@ export const createUnit = ({ address }: { address: number }) => {
   bitDivsDiv.style.display = "inline-block";
 
   const unitDiv = document.createElement("div");
+  unitDiv.style.width = "fit-content";
   unitDiv.append(bitDivsDiv);
   unitDiv.append(pointerDisplay);
 

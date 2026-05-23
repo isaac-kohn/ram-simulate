@@ -1,4 +1,6 @@
-export const createToggleButton = ({ id }: { id: string }) => {
+import type { BitElement } from "./BitInterface";
+
+export const createToggleButton = ({ id }: { id: string }): BitElement => {
   const button = document.createElement("button");
   button.id = "toggleButton-" + id;
 

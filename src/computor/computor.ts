@@ -7,6 +7,9 @@ export const createComputor = () => {
   const numUnits = 4;
 
   const computorDiv = document.createElement("div");
+  computorDiv.style.width = "fit-content";
+  computorDiv.style.display = "inline-block";
+  computorDiv.style.verticalAlign = "top";
 
   const units = Array.from({ length: numUnits }, (_, i) => {
     return createUnit({ address: i });
@@ -19,7 +22,8 @@ export const createComputor = () => {
   const controlDiv = document.createElement("div");
   controlDiv.style.display = "flex";
   controlDiv.style.justifyContent = "center";
-  controlDiv.style.width = "550px";
+  controlDiv.style.width = "100%";
+  // controlDiv.style.display = "inline-block";
   const transitionButton = document.createElement("button");
   transitionButton.textContent = "Next";
   transitionButton.style.fontSize = "30px";
