@@ -1,4 +1,5 @@
 import type { BitElement } from "./BitInterface";
+import { createEmitter } from "./emitter";
 
 export const createToggleButton = ({ id }: { id: string }): BitElement => {
   const button = document.createElement("button");
@@ -11,6 +12,8 @@ export const createToggleButton = ({ id }: { id: string }): BitElement => {
 
   let isOn = false;
 
+  const emitter = createEmitter();
+
   const updateUI = () => {
     button.textContent = isOn ? "1" : "0";
     button.style.backgroundColor = isOn ? "lightgreen" : "pink";
@@ -20,6 +23,7 @@ export const createToggleButton = ({ id }: { id: string }): BitElement => {
   button.addEventListener("click", () => {
     isOn = !isOn;
     updateUI();
+    emitter.emit();
   });
 
   return {
@@ -30,6 +34,8 @@ export const createToggleButton = ({ id }: { id: string }): BitElement => {
     setState: (x: boolean) => {
       isOn = x;
       updateUI();
+      emitter.emit();
     },
+    emitter,
   };
 };

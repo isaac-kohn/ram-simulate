@@ -1,5 +1,6 @@
 import { createStaticBit } from "../sharedPrimitives/staticBit";
 import { createToggleButton } from "../sharedPrimitives/toggleButton";
+import { createWire } from "./wire";
 
 export const createGateWindow = () => {
   const windowDiv = document.createElement("div");
@@ -15,31 +16,30 @@ export const createGateWindow = () => {
   const svg = document.createElementNS(svgNS, "svg");
   svg.style.pointerEvents = "none";
   svg.style.position = "absolute";
+  svg.setAttribute("preserve-aspect-ratio", "none");
   svg.style.inset = "0";
   windowDiv.append(svg);
 
-  const observer = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      const { width, height } = entry.contentRect;
-      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    }
+  const observer = new ResizeObserver(() => {
+    const { width, height } = windowDiv.getBoundingClientRect();
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   });
   observer.observe(windowDiv);
 
-  const line = document.createElementNS(svgNS, "line");
-  line.setAttribute("x1", "0");
-  line.setAttribute("y1", "0");
-  line.setAttribute("x2", "10");
-  line.setAttribute("y2", "10");
-  line.setAttribute("stroke", "black");
-  line.setAttribute("stroke-width", "2");
-  svg.append(line);
+  const btn1 = createToggleButton({ id: "booba" });
+  const bit1 = createStaticBit({ id: "booba" });
+  const bit2 = createStaticBit({ id: "trooba" });
 
-  const { element: btn1 } = createToggleButton({ id: "booba" });
-  const { element: bit1 } = createStaticBit({ id: "booba" });
+  bit2.element.style.margin = "20px";
 
-  windowDiv.append(btn1);
-  windowDiv.append(bit1);
+  windowDiv.append(btn1.element);
+  windowDiv.append(bit1.element);
+  windowDiv.append(bit2.element);
+
+  const wire1 = createWire({ from: btn1, to: bit1, container: windowDiv });
+  const wire2 = createWire({ from: bit1, to: bit2, container: windowDiv });
+  svg.append(wire1);
+  svg.append(wire2);
 
   return windowDiv;
 };

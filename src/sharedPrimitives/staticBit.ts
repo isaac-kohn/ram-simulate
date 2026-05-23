@@ -1,4 +1,5 @@
 import type { BitElement } from "./BitInterface";
+import { createEmitter } from "./emitter";
 
 export const createStaticBit = ({ id }: { id: string }): BitElement => {
   const bit = document.createElement("h1");
@@ -16,6 +17,8 @@ export const createStaticBit = ({ id }: { id: string }): BitElement => {
 
   let isOn = false;
 
+  const emitter = createEmitter();
+
   const updateUI = () => {
     bit.innerText = isOn ? "1" : "0";
     bit.style.background = isOn ? "white" : "#888888";
@@ -29,6 +32,8 @@ export const createStaticBit = ({ id }: { id: string }): BitElement => {
     setState: (state: boolean) => {
       isOn = state;
       updateUI();
+      emitter.emit();
     },
+    emitter,
   };
 };
