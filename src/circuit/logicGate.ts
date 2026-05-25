@@ -1,18 +1,18 @@
-import type { BitElement } from "../sharedPrimitives/BitInterface";
-import type { emitter } from "../sharedPrimitives/emitter";
+import type { BitComponent } from "../sharedPrimitives/circuitTypes";
+import type { Emitter } from "../sharedPrimitives/emitter";
 import { createTeenyBit } from "../sharedPrimitives/teenyBit";
 
-export interface logicGate {
+export interface LogicGateComponent {
   element: HTMLElement;
-  inputs: BitElement[];
-  outputs: BitElement[];
+  inputs: BitComponent[];
+  outputs: BitComponent[];
 }
 
 export const createAndGate = ({
   rerenderEmitter,
 }: {
-  rerenderEmitter: emitter;
-}): logicGate => {
+  rerenderEmitter: Emitter;
+}): LogicGateComponent => {
   const gateDiv = document.createElement("div");
   // we create a 1x1 grid cell as a hack so we can put both children in the cell and use alignSelf top/bottom
   gateDiv.style.display = "grid";

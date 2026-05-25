@@ -1,7 +1,7 @@
-import type { BitElement } from "./BitInterface";
+import type { BitComponent } from "./circuitTypes";
 import { createEmitter } from "./emitter";
 
-export const createToggleButton = ({ id }: { id: string }): BitElement => {
+export const createToggleButton = ({ id }: { id: string }): BitComponent => {
   const button = document.createElement("button");
   button.id = "toggleButton-" + id;
 

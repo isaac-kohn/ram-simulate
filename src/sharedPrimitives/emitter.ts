@@ -19,4 +19,4 @@ export const createEmitter = () => {
   };
 };
 
-export type emitter = ReturnType<typeof createEmitter>;
+export type Emitter = ReturnType<typeof createEmitter>;

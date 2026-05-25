@@ -1,16 +1,24 @@
-import type { BitElement } from "../sharedPrimitives/BitInterface";
+import type { BitComponent } from "../sharedPrimitives/circuitTypes";
+
+export interface WireComponent {
+  element: SVGPathElement;
+  getFrom: () => BitComponent;
+  getTo: () => BitComponent;
+  setFrom: (BitElement) => void;
+  setTo: (BitElement) => void;
+}
 
 export const createWire = ({
   from,
   to,
   container,
 }: {
-  from: BitElement;
-  to: BitElement;
+  from: BitComponent;
+  to: BitComponent;
   container: HTMLElement;
-}) => {
-  const bit1 = from;
-  const bit2 = to;
+}): WireComponent => {
+  let bit1 = from;
+  let bit2 = to;
 
   const svgNS = "http://www.w3.org/2000/svg";
 
@@ -58,5 +66,19 @@ export const createWire = ({
   observer.observe(bit2.element);
   observer.observe(container);
 
-  return wire;
+  return {
+    element: wire,
+    getFrom: () => bit1,
+    getTo: () => bit2,
+    setFrom: (bit: BitComponent) => {
+      bit1 = bit;
+      updateState();
+      updateCurve();
+    },
+    setTo: (bit: BitComponent) => {
+      bit2 = bit;
+      updateState();
+      updateCurve();
+    },
+  };
 };

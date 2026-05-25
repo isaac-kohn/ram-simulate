@@ -1,7 +1,7 @@
-import type { BitElement } from "./BitInterface";
+import type { BitComponent } from "./circuitTypes";
 import { createEmitter } from "./emitter";
 
-export const createTeenyBit = ({ id }: { id: string }): BitElement => {
+export const createTeenyBit = ({ id }: { id: string }): BitComponent => {
   const bit = document.createElement("div");
   bit.id = "teenyBit-" + id;
   bit.style.display = "inline-block";
