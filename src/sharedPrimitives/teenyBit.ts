@@ -8,6 +8,7 @@ export const createTeenyBit = ({ id }: { id: string }): BitComponent => {
   bit.style.width = "10px";
   bit.style.height = "10px";
   bit.style.marginInline = "10px";
+  bit.style.border = "solid 1px";
 
   bit.style.display = "flex";
 

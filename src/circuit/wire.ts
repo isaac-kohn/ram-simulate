@@ -6,24 +6,26 @@ export interface WireComponent {
   getTo: () => BitComponent;
   setFrom: (BitElement) => void;
   setTo: (BitElement) => void;
+  cleanup: () => void;
 }
 
 export const createWire = ({
   from,
   to,
-  container,
+  canvasDiv,
 }: {
   from: BitComponent;
   to: BitComponent;
-  container: HTMLElement;
+  canvasDiv: HTMLElement;
 }): WireComponent => {
   let bit1 = from;
   let bit2 = to;
+  let canvasObserver: ResizeObserver;
+  let bit1Observer: ResizeObserver;
+  let bit2Observer: ResizeObserver;
+  let unsubscribeBit1: () => void = () => {};
 
   const svgNS = "http://www.w3.org/2000/svg";
-
-  // <path id="lineAC" d="M 100 350 q 150 -300 300 0" stroke="blue" stroke-width="4" fill="none"/>
-
   const wire = document.createElementNS(svgNS, "path");
   wire.id = "wire-" + bit1.element.id + bit2.element.id;
   wire.setAttribute("stroke-width", "4");
@@ -38,7 +40,7 @@ export const createWire = ({
 
   const yOut = 20;
   const updateCurve = () => {
-    const rect0 = container.getBoundingClientRect();
+    const rect0 = canvasDiv.getBoundingClientRect();
     const x0 = rect0.left;
     const y0 = rect0.top;
 
@@ -57,28 +59,44 @@ export const createWire = ({
     );
   };
 
-  //const unsubscribe1 = bit1.emitter.subscribe(updateUI);
-  //const unsubscribe2 = bit2.emitter.subscribe(updateUI);
-  bit1.emitter.subscribe(updateState);
+  unsubscribeBit1 = bit1.emitter.subscribe(updateState);
 
-  const observer = new ResizeObserver(() => updateCurve());
-  observer.observe(bit1.element);
-  observer.observe(bit2.element);
-  observer.observe(container);
+  canvasObserver = new ResizeObserver(() => updateCurve());
+  canvasObserver.observe(canvasDiv);
+  bit1Observer = new ResizeObserver(() => updateCurve());
+  bit2Observer = new ResizeObserver(() => updateCurve());
+  bit1Observer.observe(bit1.element);
+  bit2Observer.observe(bit2.element);
+
+  const setFrom = (bit: BitComponent) => {
+    unsubscribeBit1();
+    bit1Observer.disconnect();
+    bit1 = bit;
+    bit1Observer.observe(bit1.element);
+    updateState();
+    updateCurve();
+  };
+  const setTo = (bit: BitComponent) => {
+    bit2Observer.disconnect();
+    bit2 = bit;
+    bit2Observer.observe(bit2.element);
+    updateState();
+    updateCurve();
+  };
+
+  const cleanup = () => {
+    unsubscribeBit1();
+    canvasObserver.disconnect();
+    bit1Observer.disconnect();
+    bit2Observer.disconnect();
+  };
 
   return {
     element: wire,
     getFrom: () => bit1,
     getTo: () => bit2,
-    setFrom: (bit: BitComponent) => {
-      bit1 = bit;
-      updateState();
-      updateCurve();
-    },
-    setTo: (bit: BitComponent) => {
-      bit2 = bit;
-      updateState();
-      updateCurve();
-    },
+    setFrom,
+    setTo,
+    cleanup,
   };
 };

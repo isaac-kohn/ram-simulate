@@ -1,4 +1,4 @@
-import type { LogicGateComponent } from "../circuit/logicGate";
+import type { LogicGateComponent } from "../circuit/logicGates/logicGate";
 import type { Emitter } from "./emitter";
 
 export interface BitComponent {

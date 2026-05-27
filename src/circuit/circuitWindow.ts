@@ -1,33 +1,37 @@
 import type { CircuitNodeComponent } from "../sharedPrimitives/circuitTypes";
 import { createEmitter, type Emitter } from "../sharedPrimitives/emitter";
-import { createStaticBit } from "../sharedPrimitives/staticBit";
-import { createToggleButton } from "../sharedPrimitives/toggleButton";
 import { createCircuitEditor } from "./circuitEditor";
 import { createCircuitRenderer } from "./circuitRenderer";
-import { createAndGate } from "./logicGate";
 import type { WireComponent } from "./wire";
 
 export interface CircuitModel {
   nodeRows: CircuitNodeComponent[][];
-  wireRows: WireComponent[][];
-  updateEmitter: Emitter;
+  wires: WireComponent[];
+  editEmitter: Emitter;
+  renderEmitter: Emitter;
 }
 
 export const createCircuitWindow = () => {
   let nodeRows: CircuitNodeComponent[][] = [];
-  let wireRows: WireComponent[][] = [];
+  let wires: WireComponent[] = [];
   const windowDiv = document.createElement("div");
   windowDiv.style.width = "fit-content";
   windowDiv.style.height = "fit-content";
 
+  const renderEmitter = createEmitter();
+  const editEmitter = createEmitter();
   const model: CircuitModel = {
     nodeRows,
-    wireRows,
-    updateEmitter: createEmitter(),
+    wires,
+    editEmitter,
+    renderEmitter,
   };
 
   const renderer = createCircuitRenderer({ circuitModel: model });
-  const editor = createCircuitEditor({ circuitModel: model });
+  const editor = createCircuitEditor({
+    circuitModel: model,
+    circuitRenderer: renderer,
+  });
 
   windowDiv.append(renderer.element, editor.element);
 
@@ -35,5 +39,7 @@ export const createCircuitWindow = () => {
     element: windowDiv,
     renderer,
     editor,
+    renderEmitter,
+    editEmitter,
   };
 };

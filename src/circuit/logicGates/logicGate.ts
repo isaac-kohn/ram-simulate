@@ -1,6 +1,6 @@
-import type { BitComponent } from "../sharedPrimitives/circuitTypes";
-import type { Emitter } from "../sharedPrimitives/emitter";
-import { createTeenyBit } from "../sharedPrimitives/teenyBit";
+import type { BitComponent } from "../../sharedPrimitives/circuitTypes";
+import type { Emitter } from "../../sharedPrimitives/emitter";
+import { createTeenyBit } from "../../sharedPrimitives/teenyBit";
 
 export interface LogicGateComponent {
   element: HTMLElement;

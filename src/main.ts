@@ -1,8 +1,4 @@
-import { createCircuitRenderer } from "./circuit/circuitRenderer";
 import { createCircuitWindow } from "./circuit/circuitWindow";
-import { createAndGate } from "./circuit/logicGate";
-import { createStaticBit } from "./sharedPrimitives/staticBit";
-import { createToggleButton } from "./sharedPrimitives/toggleButton";
 /*
 import { createComputor } from "./computor/computor";
 

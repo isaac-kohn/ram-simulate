@@ -14,7 +14,9 @@ export const createEmitter = () => {
     },
     subscribe: (fn: () => void) => {
       listeners.add(fn);
-      return () => listeners.delete(fn);
+      return (): void => {
+        listeners.delete(fn);
+      };
     },
   };
 };

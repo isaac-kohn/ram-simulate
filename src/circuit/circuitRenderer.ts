@@ -1,11 +1,8 @@
-import type { CircuitNodeComponent } from "../sharedPrimitives/circuitTypes";
-import { createEmitter } from "../sharedPrimitives/emitter";
-import { createStaticBit } from "../sharedPrimitives/staticBit";
-import { createToggleButton } from "../sharedPrimitives/toggleButton";
 import type { CircuitModel } from "./circuitWindow";
-import { createAndGate } from "./logicGate";
-import { createWire, type WireComponent } from "./wire";
 
+export interface CircuitRenderer {
+  element: HTMLElement;
+}
 export const createCircuitRenderer = ({
   circuitModel,
 }: {
@@ -28,13 +25,11 @@ export const createCircuitRenderer = ({
   svg.style.position = "absolute";
   svg.setAttribute("preserve-aspect-ratio", "none");
   svg.style.inset = "0";
-  canvasDiv.append(svg);
 
-  const childEmitter = createEmitter();
   const observer = new ResizeObserver(() => {
     const { width, height } = canvasDiv.getBoundingClientRect();
     svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    childEmitter.emit();
+    circuitModel.renderEmitter.emit();
   });
   observer.observe(canvasDiv);
 
@@ -51,15 +46,22 @@ export const createCircuitRenderer = ({
       return nodeRowDiv;
     });
 
-    canvasDiv.replaceChildren();
+    canvasDiv.replaceChildren(); // clear previous DOM
+    canvasDiv.append(svg);
 
     nodeRowDivs.forEach((nodeRowDiv) => {
       canvasDiv.append(nodeRowDiv);
     });
+
+    svg.replaceChildren(); // clear previous DOM
+
+    circuitModel.wires.forEach((wire) => {
+      svg.append(wire.element);
+    });
   };
   updateCircuitModel();
 
-  circuitModel.updateEmitter.subscribe(updateCircuitModel);
+  circuitModel.editEmitter.subscribe(updateCircuitModel);
 
   /*
   const btn1 = createToggleButton({ id: "booba" });
@@ -101,5 +103,5 @@ export const createCircuitRenderer = ({
   svg.append(wire4.element);
   svg.append(wire5.element);*/
 
-  return { element: canvasDiv, emitter: childEmitter };
+  return { element: canvasDiv };
 };
